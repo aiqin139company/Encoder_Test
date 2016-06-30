@@ -7,15 +7,8 @@
 #include "Encoder_Test.h"
 
 //System initialize
-void System_Init(void)
+void Encoder_Init(void)
 {
-#ifdef FLASH
-	memcpy( (Uint16 *)&RamfuncsRunStart, (Uint16 *)&RamfuncsLoadStart,
-			(unsigned long)&RamfuncsLoadSize);
-
-	InitFlash();
-#endif
-
 	InitSysCtrl();
 	DINT;
 	InitPieCtrl();
@@ -23,27 +16,41 @@ void System_Init(void)
 	IFR = 0x00000000;
 	InitPieVectTable();
 
-	Hardware_Module_Init();
-	Interrupt_Enable();
-}
+	//DSP modules initialize
+	Sci_Init();
+	Motor_Init();
+	eCAP_Init();
 
-///Enable gobal interrupt
-void Interrupt_Enable(void)
-{
 	EINT;   // Enable Global interrupt INTM
 	ERTM;   // Enable Global realtime interrupt DBGM
 }
 
-///Hardware and dsp module initialize
-void Hardware_Module_Init(void)
+///Encode test
+void Encoder_Execute(void)
 {
-	//modules initial
-	Sci_Init();
-	Motor_Init();
-	eCAP_Init();
+	long flag = 0;
+	char epwm = 0;
+
+	while(1)
+	{
+		flag = SCIRX();
+		if ( 0xAAAA == flag )
+		{
+			epwm = SCIRX();
+		}
+
+		if ( 0xA0A0 == flag )
+		{
+			PIE_eCAP_CNT();
+			Motor_Enable(epwm);
+		}
+
+		if ( 0x0A0A == flag )
+		{
+			Motor_Disable();
+		}
+	}
 }
-
-
 
 
 

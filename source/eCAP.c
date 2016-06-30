@@ -69,7 +69,7 @@ void eCAP_Init(void)
 	ECap1Regs.ECEINT.bit.CEVT1 = 1;            // 1 event = interrupt
 	EDIS;
 
-	LowPass_Params(&LP,_IQ(0.8));
+	LowPass_Params(&LP,_IQ(0.005));
 }
 
 ///eCAP_CEVT1 Interrupt handler1
@@ -80,8 +80,12 @@ __interrupt void eCAP_CNT(void)
 #endif
 	static int cnt = 0;
 	cnt ++;
-	LP.In = ECap1Regs.CAP1;
-	LowPass(&LP);
+	if ( cnt > 2000 )
+	{
+		LP.In = ECap1Regs.CAP1;
+		LowPass(&LP);
+	}
+
 	if( COUNT == cnt )
 	{
 		cnt = 0;

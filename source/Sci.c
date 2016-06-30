@@ -55,7 +55,7 @@ long SCIRX(void)
 	long dat = 0;
 	char i;
 
-	for (i = 0; i < 4; i++ )
+	for (i = 0; i < 4; i ++ )
 	{
 		while( 0 == SciaRegs.SCIFFRX.bit.RXFFST ){}		//waitting for rx
 		dat += (long)( SciaRegs.SCIRXBUF.all ) << i*8;

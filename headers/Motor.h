@@ -19,5 +19,6 @@
 void Motor_Init(void);
 void Motor_Enable(char epwm);
 void Motor_Disable(void);
+void EPWM_Init(int CLKDIV, int TBPRD, int CMP);
 
 #endif /* HEADERS_MOTOR_H_ */

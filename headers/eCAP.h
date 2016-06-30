@@ -10,7 +10,7 @@
 
 #include "Encoder_Test.h"
 
-#define COUNT 4000
+#define COUNT 6000
 
 #define eCAP_ACK()					\
 	ECap1Regs.ECCLR.bit.CEVT1 = 1;	\
