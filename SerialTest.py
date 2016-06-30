@@ -48,6 +48,7 @@ else:
 	#waiting for read faild msg!
 	sciData = ser.read(4)
 	
+	#timeout or faild
 	if 0 == ser.inWaiting():
 		print "The encoder test ok!"
 	else :
