@@ -12,9 +12,26 @@ Uint32 limit_H = 0;
 Uint32 limit_L = 0;
 LowPassFilter LP;
 
+#define TEST_PIN
+
+#ifdef TEST_PIN
+#define T_Pin  GpioDataRegs.GPBDAT.bit.GPIO39
+void Test_Pin(void)
+{
+	EALLOW;
+	GpioCtrlRegs.GPBMUX1.bit.GPIO39 = 0;
+	GpioCtrlRegs.GPBDIR.bit.GPIO39 = 1;
+	GpioDataRegs.GPBDAT.bit.GPIO39 = 0;
+	EDIS;
+}
+#endif
+
 ///eCAP_MODULE Initialize
 void eCAP_Init(void)
 {
+#ifdef TEST_PIN
+	Test_Pin();
+#endif
 	//GPIO Config
 	EALLOW;
 	GpioCtrlRegs.GPAPUD.bit.GPIO19 = 0;     // Enable pull-up on GPIO19 (CAP1)
@@ -62,6 +79,9 @@ void eCAP_Init(void)
 ///sampling an gerenal period
 __interrupt void eCAP_CNT(void)
 {
+#ifdef TEST_PIN
+	T_Pin = 1;
+#endif
 	static int cnt = 0;
 	cnt ++;
 	if ( cnt > 2000 && cnt < 5000 )
@@ -72,8 +92,8 @@ __interrupt void eCAP_CNT(void)
 
 	if( 5000 == cnt )
 	{
-		limit_H = LP.Out + LP.Out * 0.5;
-		limit_L = LP.Out - LP.Out * 0.5;
+		limit_H = LP.Out + _IQmpy(LP.Out, _IQ(0.5));
+		limit_L = LP.Out - _IQmpy(LP.Out, _IQ(0.5));
 		SCITX(LP.Out);
 		LowPass_Reinit(LP);
 	}
@@ -86,6 +106,9 @@ __interrupt void eCAP_CNT(void)
 
 	//CLR Interrupt Flag
 	eCAP_ACK();
+#ifdef TEST_PIN
+	T_Pin = 0;
+#endif
 }
 
 
@@ -93,6 +116,9 @@ __interrupt void eCAP_CNT(void)
 ///compared with the general period
 __interrupt void eCAP_ISR(void)
 {
+#ifdef TEST_PIN
+	T_Pin = 1;
+#endif
 	period = ECap1Regs.CAP1;
 
 	if ( ( period > limit_H ) || ( period < limit_L ) )
@@ -102,6 +128,9 @@ __interrupt void eCAP_ISR(void)
 
 	//CLR Interrupt Flag
 	eCAP_ACK();
+#ifdef TEST_PIN
+	T_Pin = 0;
+#endif
 }
 
 
