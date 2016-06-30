@@ -19,7 +19,21 @@ typedef struct LowPass
 	_iq Out;   		// Output
 }LowPassFilter;
 
-void LowPass_Params(LowPassFilter *v, _iq x);
-void LowPass(LowPassFilter *v);
+///Setting
+#define LowPass_Params(v,x)	\
+{							\
+	v.a0 = _IQ(1) - x;		\
+	v.b1 = x;				\
+	v.In = 0;   			\
+	v.prevIn = 0;   		\
+	v.Out = 0;   			\
+}
+
+///LowPass filter
+#define LowPass(v)											\
+{															\
+	v.Out = _IQmpy(v.a0, v.In) + _IQmpy(v.b1, v.prevIn);	\
+	v.prevIn = v.Out;										\
+}
 
 #endif /* HEADERS_LOWPASSFILTER_H_ */
