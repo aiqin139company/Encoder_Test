@@ -8,7 +8,7 @@
 #define HEADERS_LOWPASSFILTER_H_
 
 #include "Encoder_Test.h"
-#include "IQMathLib.h"
+#include "IQmathLib.h"
 
 typedef struct LowPass
 {
