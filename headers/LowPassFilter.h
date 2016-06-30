@@ -29,6 +29,13 @@ typedef struct LowPass
 	v.Out = 0;   			\
 }
 
+#define LowPass_Reinit(v) 	\
+{							\
+	v.In = 0;				\
+	v.prevIn = 0;			\
+	v.Out = 0;				\
+}
+
 ///LowPass filter
 #define LowPass(v)											\
 {															\

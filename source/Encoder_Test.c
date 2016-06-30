@@ -6,7 +6,7 @@
 //###########################################################################
 #include "Encoder_Test.h"
 
-//System initialize
+///System initialize
 void Encoder_Init(void)
 {
 	InitSysCtrl();

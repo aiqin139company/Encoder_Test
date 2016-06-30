@@ -57,6 +57,8 @@ else:
 		dat = (struct.unpack(">l", sciData))[0]
 		if 0xFFFF == dat :
 			print "The encoder test faild!"
+		else :
+			print "error!"
 	
 	#Stopping the motor
 	ser_write(0x0A0A)	

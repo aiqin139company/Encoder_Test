@@ -6,6 +6,7 @@
 //###########################################################################
 #include "eCAP.h"
 
+const Uint32 EncoderError = 0xFFFF;
 Uint32 period = 0;
 Uint32 limit_H = 0;
 Uint32 limit_L = 0;
@@ -58,6 +59,7 @@ void eCAP_Init(void)
 }
 
 ///eCAP_CEVT1 Interrupt handler1
+///sampling an gerenal period
 __interrupt void eCAP_CNT(void)
 {
 	static int cnt = 0;
@@ -73,6 +75,7 @@ __interrupt void eCAP_CNT(void)
 		limit_H = LP.Out + LP.Out * 0.5;
 		limit_L = LP.Out - LP.Out * 0.5;
 		SCITX(LP.Out);
+		LowPass_Reinit(LP);
 	}
 
 	if ( 6000 == cnt )
@@ -87,13 +90,14 @@ __interrupt void eCAP_CNT(void)
 
 
 ///eCAP_CEVT1 Interrupt handler2
+///compared with the general period
 __interrupt void eCAP_ISR(void)
 {
 	period = ECap1Regs.CAP1;
 
 	if ( ( period > limit_H ) || ( period < limit_L ) )
 	{
-		SCITX(0xffff);
+		SCITX(EncoderError);
 	}
 
 	//CLR Interrupt Flag
