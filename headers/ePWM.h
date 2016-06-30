@@ -1,9 +1,9 @@
-/*
- * pwm.h
- *
- *  Created on: 2016Äê6ÔÂ23ÈÕ
- *      Author: Admin
- */
+//###########################################################################
+// ePWM.h
+// About ePWM Module
+//
+// $Copyright: Copyright (C) LDO Motors
+//###########################################################################
 
 #ifndef HEADERS_EPWM_H_
 #define HEADERS_EPWM_H_

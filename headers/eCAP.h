@@ -1,9 +1,9 @@
-/*
- * cap.h
- *
- *  Created on: 2016Äê6ÔÂ27ÈÕ
- *      Author: Admin
- */
+//###########################################################################
+// eCAP.h
+// About eCAP module
+//
+// $Copyright: Copyright (C) LDO Motors
+//###########################################################################
 
 #ifndef HEADERS_ECAP_H_
 #define HEADERS_ECAP_H_
@@ -27,8 +27,6 @@
 	EALLOW;								\
 	PieVectTable.ECAP1_INT = &eCAP_ISR;	\
 	EDIS;
-
-
 
 void eCAP_Init(void);
 __interrupt void eCAP_CNT(void);

@@ -1,9 +1,9 @@
-/*
- * motor.h
- *
- *  Created on: 2016Äê6ÔÂ24ÈÕ
- *      Author: Admin
- */
+//###########################################################################
+// Motor.h
+// Manager the motor
+//
+// $Copyright: Copyright (C) LDO Motors
+//###########################################################################
 
 #ifndef HEADERS_MOTOR_H_
 #define HEADERS_MOTOR_H_

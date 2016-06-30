@@ -1,9 +1,8 @@
-/*
- * LowPassFilter.h
- *
- *  Created on: 2016Äê6ÔÂ29ÈÕ
- *      Author: Admin
- */
+//###########################################################################
+// LowPassFilter.h
+//
+// $Copyright: Copyright (C) LDO Motors
+//###########################################################################
 
 #ifndef HEADERS_LOWPASSFILTER_H_
 #define HEADERS_LOWPASSFILTER_H_

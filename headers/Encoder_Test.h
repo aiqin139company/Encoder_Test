@@ -1,9 +1,10 @@
-/*
- * common.h
- *
- *  Created on: 2016Äê6ÔÂ22ÈÕ
- *      Author: Admin
- */
+//###########################################################################
+// Encoder_Test.h
+// About the project of Encoder_Test
+//
+// $Copyright: Copyright (C) LDO Motors
+//###########################################################################
+
 
 #ifndef HEADERS_ENCODER_TEST_H_
 #define HEADERS_ENCODER_TEST_H_
