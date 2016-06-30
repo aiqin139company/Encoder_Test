@@ -38,10 +38,12 @@ private:
 	Uint32 limit_L;
 	LowPassFilter LP;
 	SCI_Module sci;
+	static eCAP_Module instance;
 
 public:
 
 	eCAP_Module();
+	static eCAP_Module *Instance();
 
 	void eCAP_Init(void);
 	static __interrupt void eCAP_CNT(void);

@@ -12,7 +12,7 @@ extern Uint16 RamfuncsLoadStart;
 extern Uint16 RamfuncsLoadSize;
 extern Uint16 RamfuncsRunStart;
 
-Encoder Encoder::Encoder = Encoder();
+Encoder Encoder::encoder = Encoder();
 
 ///main function
 int main(void)
@@ -23,8 +23,8 @@ int main(void)
 	InitFlash();
 #endif
 
-	Encoder::Encoder.Encoder_Init();
-	Encoder::Encoder.Encoder_Execute();
+	Encoder::encoder.Encoder_Init();
+	Encoder::encoder.Encoder_Execute();
 
 }
 

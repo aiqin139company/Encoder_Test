@@ -21,13 +21,13 @@ private:
 	long flag;
 	char epwm;
 
-	static Encoder instance;
-
 	SCI_Module sci;
 	Motor_Module motor;
 	eCAP_Module eCAP;
 
 public:
+
+	static Encoder encoder;
 
 	void Encoder_Init(void);
 	void Encoder_Execute(void);

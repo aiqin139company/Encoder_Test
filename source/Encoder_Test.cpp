@@ -6,11 +6,6 @@
 //###########################################################################
 #include "Encoder_Test.h"
 
-Encoder* Encoder::Instance()
-{
-	return &instance;
-}
-
 ///System initialize
 void Encoder::Encoder_Init(void)
 {
@@ -43,7 +38,6 @@ void Encoder::Encoder_Execute(void)
 
 		if ( 0xA0A0 == flag )
 		{
-			PIE_eCAP_CNT();
 			motor.Motor_Enable(epwm);
 		}
 

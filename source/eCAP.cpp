@@ -14,6 +14,14 @@ eCAP_Module::eCAP_Module() :
 {
 }
 
+eCAP_Module eCAP_Module::instance = eCAP_Module();
+
+///
+eCAP_Module* eCAP_Module::Instance()
+{
+	return &instance;
+}
+
 
 ///eCAP_MODULE Initialize
 void eCAP_Module::eCAP_Init(void)
@@ -69,15 +77,15 @@ __interrupt void eCAP_Module::eCAP_CNT(void)
 	cnt ++;
 	if ( cnt > 2000 && cnt < 5000 )
 	{
-		LP.In = ECap1Regs.CAP1;
-		LOWPASS_MACRO(LP);
+		instance.LP.In = ECap1Regs.CAP1;
+		LOWPASS_MACRO(instance.LP);
 	}
 
 	if( 5000 == cnt )
 	{
-		limit_H = LP.Out + LP.Out * 0.5;
-		limit_L = LP.Out - LP.Out * 0.5;
-		sci.SCITX(LP.Out);
+		instance.limit_H = instance.LP.Out + instance.LP.Out * 0.5;
+		instance.limit_L = instance.LP.Out - instance.LP.Out * 0.5;
+		instance.sci.SCITX(instance.LP.Out);
 	}
 
 	if ( 6000 == cnt )
@@ -95,11 +103,12 @@ __interrupt void eCAP_Module::eCAP_CNT(void)
 ///compared with the general period
 __interrupt void eCAP_Module::eCAP_ISR(void)
 {
-	period = ECap1Regs.CAP1;
+	instance.period = ECap1Regs.CAP1;
 
-	if ( ( period > limit_H ) || ( period < limit_L ) )
+	if ( ( instance.period > instance.limit_H )
+		|| ( instance.period < instance.limit_L ) )
 	{
-		sci.SCITX(EncoderError);
+		instance.sci.SCITX(EncoderError);
 	}
 
 	//CLR Interrupt Flag
