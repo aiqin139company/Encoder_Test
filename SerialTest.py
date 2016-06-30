@@ -2,6 +2,9 @@ import sys
 import serial
 import struct
 
+motorSpeed = 14
+testTime = 10
+
 #ser_write method
 def ser_write(data):
 	writeData = data
@@ -14,11 +17,12 @@ if len(sys.argv) != 2:
 	sys.exit()
 else:
 	portName = sys.argv[1]
-	
+
+#open serical	
 ser = serial.Serial()
 ser.baudrate = 230400
 ser.port = portName
-ser.timeout = 10.0
+ser.timeout = testTime
 
 print "Opening serial port: " + portName
 ser.open()
@@ -26,8 +30,6 @@ ser.open()
 if not ser.is_open:
 	print "Count not open serial port '%s'" % portName
 else:	
-	
-	motorSpeed = 15
 	
 	#Setting motor speed
 	ser_write(0xAAAA)
@@ -37,7 +39,7 @@ else:
 	#Starting 
 	ser_write(0xA0A0)
 	print "Starting the motor!"
-	print "Testting encoder, please waiting 10s!"
+	print "Testting encoder, please waiting %d s!" % testTime
 	
 	#Getting the period of speed
 	sciData = ser.read(4)
@@ -59,4 +61,6 @@ else:
 	#Stopping the motor
 	ser_write(0x0A0A)	
 	print "Stopping the motor!"
-	
+
+ser.close()	
+
