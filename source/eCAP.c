@@ -4,31 +4,16 @@
 //
 // $Copyright: Copyright (C) LDO Motors
 //###########################################################################
-#include <eCAP.h>
+#include "eCAP.h"
 
 Uint32 period = 0;
 Uint32 limit_H = 0;
 Uint32 limit_L = 0;
 LowPassFilter LP;
 
-#ifdef TEST_PIN
-#define T_Pin  GpioDataRegs.GPBDAT.bit.GPIO39
-void Test_Pin(void)
-{
-	EALLOW;
-	GpioCtrlRegs.GPBMUX1.bit.GPIO39 = 0;
-	GpioCtrlRegs.GPBDIR.bit.GPIO39 = 1;
-	GpioDataRegs.GPBDAT.bit.GPIO39 = 0;
-	EDIS;
-}
-#endif
-
 ///eCAP_MODULE Initialize
 void eCAP_Init(void)
 {
-#ifdef TEST_PIN
-	Test_Pin();
-#endif
 	//GPIO Config
 	EALLOW;
 	GpioCtrlRegs.GPAPUD.bit.GPIO19 = 0;     // Enable pull-up on GPIO19 (CAP1)
@@ -75,32 +60,29 @@ void eCAP_Init(void)
 ///eCAP_CEVT1 Interrupt handler1
 __interrupt void eCAP_CNT(void)
 {
-#ifdef TEST_PIN
-	T_Pin = 1;
-#endif
 	static int cnt = 0;
 	cnt ++;
-	if ( cnt > 2000 )
+	if ( cnt > 2000 && cnt < 4000 )
 	{
 		LP.In = ECap1Regs.CAP1;
 		LowPass(&LP);
 	}
 
-	if( COUNT == cnt )
+	if( 4000 == cnt )
+	{
+		limit_H = LP.Out + LP.Out * 0.5;
+		limit_L = LP.Out - LP.Out * 0.5;
+		SCITX(LP.Out);
+	}
+
+	if ( 6000 == cnt )
 	{
 		cnt = 0;
-		limit_H = LP.Out + LP.Out * 0.15;
-		limit_L = LP.Out - LP.Out * 0.15;
-		SCITX(LP.Out);
 		PIE_eCAP_ISR();
 	}
 
 	//CLR Interrupt Flag
 	eCAP_ACK();
-
-#ifdef TEST_PIN
-	T_Pin = 0;
-#endif
 }
 
 
@@ -109,14 +91,13 @@ __interrupt void eCAP_ISR(void)
 {
 	period = ECap1Regs.CAP1;
 
-	if ( !(limit_H > period && limit_L < period) )
+	if ( ( period > limit_H ) || ( period < limit_L ) )
 	{
 		SCITX(0xffff);
 	}
 
 	//CLR Interrupt Flag
 	eCAP_ACK();
-
 }
 
 
