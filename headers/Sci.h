@@ -8,11 +8,20 @@
 #ifndef HEADERS_SCI_H_
 #define HEADERS_SCI_H_
 
-#include "Encoder_Test.h"
+#include "SysVar.h"
 
-void Sci_Init(void);
-void SCITX(long data);
-long SCIRX(void);
+class SCI_Module
+{
+private:
+
+	long dat;
+	char i;
+
+public:
+	void Sci_Init(void);
+	void SCITX(long data);
+	long SCIRX(void);
+};
 
 #endif	/* HEADERS_SCI_H_ */
 

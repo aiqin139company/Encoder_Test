@@ -6,8 +6,13 @@
 //###########################################################################
 #include "Encoder_Test.h"
 
+Encoder* Encoder::Instance()
+{
+	return &instance;
+}
+
 ///System initialize
-void Encoder_Init(void)
+void Encoder::Encoder_Init(void)
 {
 	InitSysCtrl();
 	DINT;
@@ -17,37 +22,34 @@ void Encoder_Init(void)
 	InitPieVectTable();
 
 	//DSP modules initialize
-	Sci_Init();
-	Motor_Init();
-	eCAP_Init();
+	sci.Sci_Init();
+	motor.Motor_Init();
+	eCAP.eCAP_Init();
 
 	EINT;   // Enable Global interrupt INTM
 	ERTM;   // Enable Global realtime interrupt DBGM
 }
 
 ///Encode test
-void Encoder_Execute(void)
+void Encoder::Encoder_Execute(void)
 {
-	long flag = 0;
-	char epwm = 0;
-
 	while(1)
 	{
-		flag = SCIRX();
+		flag = sci.SCIRX();
 		if ( 0xAAAA == flag )
 		{
-			epwm = SCIRX();
+			epwm = sci.SCIRX();
 		}
 
 		if ( 0xA0A0 == flag )
 		{
 			PIE_eCAP_CNT();
-			Motor_Enable(epwm);
+			motor.Motor_Enable(epwm);
 		}
 
 		if ( 0x0A0A == flag )
 		{
-			Motor_Disable();
+			motor.Motor_Disable();
 		}
 	}
 }

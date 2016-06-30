@@ -1,21 +1,38 @@
-//###########################################################################
-// Encoder_Test.h
-// About the project of Encoder_Test
-//
-// $Copyright: Copyright (C) LDO Motors
-//###########################################################################
+/*
+ * SysVar.h
+ *
+ *  Created on: 2016Äê6ÔÂ30ÈÕ
+ *      Author: Admin
+ */
 
 #ifndef HEADERS_ENCODER_TEST_H_
 #define HEADERS_ENCODER_TEST_H_
 
-#include "DSP2803x_Device.h"
-#include "DSP2803x_Examples.h"
-#include "eCAP.h"
 #include "Sci.h"
 #include "LowPassfilter.h"
+#include "eCAP.h"
 #include "Motor.h"
+#include "IQmathLib.h"
 
-void Encoder_Init(void);
-void Encoder_Execute(void);
+class Encoder
+{
+private:
+	//Members
+	long flag;
+	char epwm;
+
+	static Encoder instance;
+
+	SCI_Module sci;
+	Motor_Module motor;
+	eCAP_Module eCAP;
+
+public:
+
+	void Encoder_Init(void);
+	void Encoder_Execute(void);
+};
+
+
 
 #endif /* HEADERS_ENCODER_TEST_H_ */

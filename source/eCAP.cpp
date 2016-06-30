@@ -6,14 +6,17 @@
 //###########################################################################
 #include "eCAP.h"
 
-const Uint32 EncoderError = 0xFFFF;
-Uint32 period = 0;
-Uint32 limit_H = 0;
-Uint32 limit_L = 0;
-LowPassFilter LP;
+///Constructor
+eCAP_Module::eCAP_Module() :
+	period(0),
+	limit_H(0),
+	limit_L(0)
+{
+}
+
 
 ///eCAP_MODULE Initialize
-void eCAP_Init(void)
+void eCAP_Module::eCAP_Init(void)
 {
 	//GPIO Config
 	EALLOW;
@@ -55,27 +58,26 @@ void eCAP_Init(void)
 	ECap1Regs.ECEINT.bit.CEVT1 = 1;            // 1 event = interrupt
 	EDIS;
 
-	LowPass_Params(LP,_IQ(0.005));
+	LP.UpdateParams(_IQ(0.005));
 }
 
 ///eCAP_CEVT1 Interrupt handler1
 ///sampling an gerenal period
-__interrupt void eCAP_CNT(void)
+__interrupt void eCAP_Module::eCAP_CNT(void)
 {
 	static int cnt = 0;
 	cnt ++;
 	if ( cnt > 2000 && cnt < 5000 )
 	{
 		LP.In = ECap1Regs.CAP1;
-		LowPass(LP);
+		LOWPASS_MACRO(LP);
 	}
 
 	if( 5000 == cnt )
 	{
 		limit_H = LP.Out + LP.Out * 0.5;
 		limit_L = LP.Out - LP.Out * 0.5;
-		SCITX(LP.Out);
-		LowPass_Reinit(LP);
+		sci.SCITX(LP.Out);
 	}
 
 	if ( 6000 == cnt )
@@ -91,13 +93,13 @@ __interrupt void eCAP_CNT(void)
 
 ///eCAP_CEVT1 Interrupt handler2
 ///compared with the general period
-__interrupt void eCAP_ISR(void)
+__interrupt void eCAP_Module::eCAP_ISR(void)
 {
 	period = ECap1Regs.CAP1;
 
 	if ( ( period > limit_H ) || ( period < limit_L ) )
 	{
-		SCITX(EncoderError);
+		sci.SCITX(EncoderError);
 	}
 
 	//CLR Interrupt Flag

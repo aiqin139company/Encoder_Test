@@ -6,8 +6,11 @@
 //###########################################################################
 #include "Sci.h"
 
+///
+
+
 ///SCI_MODULE Initialize
-void Sci_Init(void)
+void SCI_Module::Sci_Init(void)
 {
 	/* Configure SCI-A pins MUX*/
 	EALLOW;
@@ -38,7 +41,7 @@ void Sci_Init(void)
 }
 
 ///TX function
-void SCITX(long data)
+void SCI_Module::SCITX(long data)
 {
 	char i = 0;
 
@@ -50,7 +53,7 @@ void SCITX(long data)
 }
 
 ///RX function
-long SCIRX(void)
+long SCI_Module::SCIRX(void)
 {
 	long dat = 0;
 	char i;

@@ -8,7 +8,9 @@
 #ifndef HEADERS_ECAP_H_
 #define HEADERS_ECAP_H_
 
-#include "Encoder_Test.h"
+#include "SysVar.h"
+#include "LowPassFilter.h"
+#include "Sci.h"
 
 #define eCAP_ACK()					\
 	ECap1Regs.ECCLR.bit.CEVT1 = 1;	\
@@ -19,15 +21,32 @@
 #define PIE_eCAP_CNT()					\
 	EALLOW;								\
 	PieVectTable.ECAP1_INT = &eCAP_CNT;	\
-	EDIS;
+	EDIS;								\
 
 #define PIE_eCAP_ISR()					\
 	EALLOW;								\
 	PieVectTable.ECAP1_INT = &eCAP_ISR;	\
-	EDIS;
+	EDIS;								\
 
-void eCAP_Init(void);
-__interrupt void eCAP_CNT(void);
-__interrupt void eCAP_ISR(void);
+#define EncoderError 0xFFFF
+
+class eCAP_Module
+{
+private:
+	Uint32 period;
+	Uint32 limit_H;
+	Uint32 limit_L;
+	LowPassFilter LP;
+	SCI_Module sci;
+
+public:
+
+	eCAP_Module();
+
+	void eCAP_Init(void);
+	static __interrupt void eCAP_CNT(void);
+	static __interrupt void eCAP_ISR(void);
+};
+
 
 #endif /* HEADERS_ECAP_H_ */

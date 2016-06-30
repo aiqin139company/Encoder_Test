@@ -7,7 +7,7 @@
 #include <Motor.h>
 
 ///Motor Initialize
-void Motor_Init(void)
+void Motor_Module::Motor_Init(void)
 {
 	//Gpio Config
 	EALLOW;
@@ -25,7 +25,7 @@ void Motor_Init(void)
 }
 
 ///ePWM Module Initialize
-void EPWM_Init(int CLKDIV, int TBPRD, int CMP)
+void Motor_Module::EPWM_Init(int CLKDIV, int TBPRD, int CMP)
 {
 	//GPIO Config
 	EALLOW;
@@ -60,14 +60,14 @@ void EPWM_Init(int CLKDIV, int TBPRD, int CMP)
 }
 
 ///enable motor to running
-void Motor_Enable(char epwm)
+void Motor_Module::Motor_Enable(char epwm)
 {
 	EPWM1A = epwm;
 	EPWM1B = epwm;
 }
 
 ///stopping motor
-void Motor_Disable(void)
+void Motor_Module::Motor_Disable(void)
 {
 	EPWM1A = 0;
 	EPWM1B = 0;
