@@ -23,9 +23,9 @@ private:
 
 public:
 
-	void Motor_Init(void);
-	void Motor_Enable(char epwm);
-	void Motor_Disable(void);
+	void Initialize(void);
+	void Enable(char epwm);
+	void Disable(void);
 	void EPWM_Init(int CLKDIV, int TBPRD, int CMP);
 
 };

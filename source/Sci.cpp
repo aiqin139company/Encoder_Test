@@ -10,7 +10,7 @@
 
 
 ///SCI_MODULE Initialize
-void SCI_Module::Sci_Init(void)
+void SCI_Module::Initialize(void)
 {
 	/* Configure SCI-A pins MUX*/
 	EALLOW;

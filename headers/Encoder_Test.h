@@ -29,10 +29,9 @@ public:
 
 	static Encoder encoder;
 
-	void Encoder_Init(void);
-	void Encoder_Execute(void);
+	void Initialize(void);
+	void Execute(void);
 };
-
 
 
 #endif /* HEADERS_ENCODER_TEST_H_ */

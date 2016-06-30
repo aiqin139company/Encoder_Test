@@ -18,7 +18,7 @@ private:
 	char i;
 
 public:
-	void Sci_Init(void);
+	void Initialize(void);
 	void SCITX(long data);
 	long SCIRX(void);
 };

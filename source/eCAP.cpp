@@ -10,7 +10,8 @@
 eCAP_Module::eCAP_Module() :
 	period(0),
 	limit_H(0),
-	limit_L(0)
+	limit_L(0),
+	cnt(0)
 {
 }
 
@@ -24,7 +25,7 @@ eCAP_Module* eCAP_Module::Instance()
 
 
 ///eCAP_MODULE Initialize
-void eCAP_Module::eCAP_Init(void)
+void eCAP_Module::Initialize(void)
 {
 	//GPIO Config
 	EALLOW;
@@ -73,24 +74,24 @@ void eCAP_Module::eCAP_Init(void)
 ///sampling an gerenal period
 __interrupt void eCAP_Module::eCAP_CNT(void)
 {
-	static int cnt = 0;
-	cnt ++;
-	if ( cnt > 2000 && cnt < 5000 )
+
+	instance.cnt ++;
+	if ( instance.cnt > 2000 && instance.cnt < 5000 )
 	{
 		instance.LP.In = ECap1Regs.CAP1;
 		LOWPASS_MACRO(instance.LP);
 	}
 
-	if( 5000 == cnt )
+	if( 5000 == instance.cnt )
 	{
 		instance.limit_H = instance.LP.Out + instance.LP.Out * 0.5;
 		instance.limit_L = instance.LP.Out - instance.LP.Out * 0.5;
 		instance.sci.SCITX(instance.LP.Out);
 	}
 
-	if ( 6000 == cnt )
+	if ( 6000 == instance.cnt )
 	{
-		cnt = 0;
+		instance.cnt = 0;
 		PIE_eCAP_ISR();
 	}
 

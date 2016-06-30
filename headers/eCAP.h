@@ -36,6 +36,8 @@ private:
 	Uint32 period;
 	Uint32 limit_H;
 	Uint32 limit_L;
+	Uint32 cnt;
+
 	LowPassFilter LP;
 	SCI_Module sci;
 	static eCAP_Module instance;
@@ -45,7 +47,7 @@ public:
 	eCAP_Module();
 	static eCAP_Module *Instance();
 
-	void eCAP_Init(void);
+	void Initialize(void);
 	static __interrupt void eCAP_CNT(void);
 	static __interrupt void eCAP_ISR(void);
 };

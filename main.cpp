@@ -4,6 +4,7 @@
 // $Copyright: Copyright (C) LDO Motors
 //###########################################################################
 
+#include "string.h"
 #include "SysVar.h"
 #include "Encoder_Test.h"
 
@@ -17,14 +18,14 @@ Encoder Encoder::encoder = Encoder();
 ///main function
 int main(void)
 {
-#ifdef FLASH1
+#ifdef FLASH
 	memcpy( (Uint16 *)&RamfuncsRunStart, (Uint16 *)&RamfuncsLoadStart,
 			(unsigned long)&RamfuncsLoadSize);
 	InitFlash();
 #endif
 
-	Encoder::encoder.Encoder_Init();
-	Encoder::encoder.Encoder_Execute();
+	Encoder::encoder.Initialize();
+	Encoder::encoder.Execute();
 
 }
 

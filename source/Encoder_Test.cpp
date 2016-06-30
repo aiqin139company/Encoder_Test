@@ -7,7 +7,7 @@
 #include "Encoder_Test.h"
 
 ///System initialize
-void Encoder::Encoder_Init(void)
+void Encoder::Initialize(void)
 {
 	InitSysCtrl();
 	DINT;
@@ -17,16 +17,16 @@ void Encoder::Encoder_Init(void)
 	InitPieVectTable();
 
 	//DSP modules initialize
-	sci.Sci_Init();
-	motor.Motor_Init();
-	eCAP.eCAP_Init();
+	sci.Initialize();
+	motor.Initialize();
+	eCAP.Initialize();
 
 	EINT;   // Enable Global interrupt INTM
 	ERTM;   // Enable Global realtime interrupt DBGM
 }
 
 ///Encode test
-void Encoder::Encoder_Execute(void)
+void Encoder::Execute(void)
 {
 	while(1)
 	{
@@ -38,12 +38,12 @@ void Encoder::Encoder_Execute(void)
 
 		if ( 0xA0A0 == flag )
 		{
-			motor.Motor_Enable(epwm);
+			motor.Enable(epwm);
 		}
 
 		if ( 0x0A0A == flag )
 		{
-			motor.Motor_Disable();
+			motor.Disable();
 		}
 	}
 }
