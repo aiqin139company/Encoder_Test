@@ -12,25 +12,36 @@ Uint32 limit_H = 0;
 Uint32 limit_L = 0;
 LowPassFilter LP;
 
-#define TEST_PIN1
+#define TEST1
+#ifdef TEST
+
+//#define TEST_PIN
+#define TEST_LED
 
 #ifdef TEST_PIN
 #define T_Pin  GpioDataRegs.GPBDAT.bit.GPIO39
-void Test_Pin(void)
+#endif
+
+#ifdef TEST_LED
+#define LED 	GpioDataRegs.GPBDAT.bit.GPIO39
+#endif
+
+void Test(void)
 {
 	EALLOW;
 	GpioCtrlRegs.GPBMUX1.bit.GPIO39 = 0;
 	GpioCtrlRegs.GPBDIR.bit.GPIO39 = 1;
-	GpioDataRegs.GPBDAT.bit.GPIO39 = 0;
+	GpioDataRegs.GPBDAT.bit.GPIO39 = 1;
 	EDIS;
 }
+
 #endif
 
 ///eCAP_MODULE Initialize
 void eCAP_Init(void)
 {
-#ifdef TEST_PIN
-	Test_Pin();
+#ifdef TEST
+	Test();
 #endif
 	//GPIO Config
 	EALLOW;
@@ -82,8 +93,8 @@ __interrupt void eCAP_CNT(void)		//20us
 #ifdef TEST_PIN
 	T_Pin = 1;
 #endif
+	static Uint32 cnt = 0;
 
-	static int cnt = 0;
 	cnt ++;
 	if ( cnt > 4000 && cnt < 10000 )
 	{
@@ -93,11 +104,13 @@ __interrupt void eCAP_CNT(void)		//20us
 
 	if( 10000 == cnt )
 	{
-		limit_H = LP.Out + _IQmpy(LP.Out, _IQ(0.5));
-		limit_L = LP.Out - _IQmpy(LP.Out, _IQ(0.5));
-//		limit_H = LP.Out + LP.Out >> 1;
-//		limit_L = LP.Out - LP.Out >> 1;
+//		limit_H = LP.Out + _IQmpy(LP.Out, _IQ(0.5));
+//		limit_L = LP.Out - _IQmpy(LP.Out, _IQ(0.5));
+		limit_H = LP.Out + LP.Out >> 1;
+		limit_L = LP.Out - LP.Out >> 1;
+#ifndef TEST_LED
 		SCITX(LP.Out);
+#endif
 		LowPass_Reinit(LP);
 	}
 
@@ -109,6 +122,7 @@ __interrupt void eCAP_CNT(void)		//20us
 
 	//CLR Interrupt Flag
 	eCAP_ACK();
+
 #ifdef TEST_PIN
 	T_Pin = 0;
 #endif
@@ -127,7 +141,11 @@ __interrupt void eCAP_ISR(void)
 
 	if ( ( period > limit_H ) || ( period < limit_L ) )
 	{
+	#ifndef TEST_LED
 		SCITX(EncoderError);
+	#else
+		LED = 0;
+	#endif
 	}
 
 	//CLR Interrupt Flag
