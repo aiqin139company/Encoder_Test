@@ -12,7 +12,7 @@ Uint32 limit_H = 0;
 Uint32 limit_L = 0;
 LowPassFilter LP;
 
-#define TEST_PIN
+#define TEST_PIN1
 
 #ifdef TEST_PIN
 #define T_Pin  GpioDataRegs.GPBDAT.bit.GPIO39
@@ -77,28 +77,31 @@ void eCAP_Init(void)
 
 ///eCAP_CEVT1 Interrupt handler1
 ///sampling an gerenal period
-__interrupt void eCAP_CNT(void)
+__interrupt void eCAP_CNT(void)		//20us
 {
 #ifdef TEST_PIN
 	T_Pin = 1;
 #endif
+
 	static int cnt = 0;
 	cnt ++;
-	if ( cnt > 2000 && cnt < 5000 )
+	if ( cnt > 4000 && cnt < 10000 )
 	{
 		LP.In = ECap1Regs.CAP1;
 		LowPass(LP);
 	}
 
-	if( 5000 == cnt )
+	if( 10000 == cnt )
 	{
 		limit_H = LP.Out + _IQmpy(LP.Out, _IQ(0.5));
 		limit_L = LP.Out - _IQmpy(LP.Out, _IQ(0.5));
+//		limit_H = LP.Out + LP.Out >> 1;
+//		limit_L = LP.Out - LP.Out >> 1;
 		SCITX(LP.Out);
 		LowPass_Reinit(LP);
 	}
 
-	if ( 6000 == cnt )
+	if ( 12000 == cnt )
 	{
 		cnt = 0;
 		PIE_eCAP_ISR();
@@ -119,6 +122,7 @@ __interrupt void eCAP_ISR(void)
 #ifdef TEST_PIN
 	T_Pin = 1;
 #endif
+
 	period = ECap1Regs.CAP1;
 
 	if ( ( period > limit_H ) || ( period < limit_L ) )

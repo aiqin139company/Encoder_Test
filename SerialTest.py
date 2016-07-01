@@ -2,8 +2,8 @@ import sys
 import serial
 import struct
 
-motorSpeed = 40
-testTime = 5
+motorSpeed = 20
+testTime = 10
 
 #ser_write method
 def ser_write(data):
