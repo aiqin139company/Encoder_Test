@@ -12,11 +12,11 @@ Uint32 limit_H = 0;
 Uint32 limit_L = 0;
 LowPassFilter LP;
 
-#define TEST1
+#define TEST
 #ifdef TEST
 
-//#define TEST_PIN
-#define TEST_LED
+#define TEST_PIN
+//#define TEST_LED
 
 #ifdef TEST_PIN
 #define T_Pin  GpioDataRegs.GPBDAT.bit.GPIO39
@@ -26,12 +26,12 @@ LowPassFilter LP;
 #define LED 	GpioDataRegs.GPBDAT.bit.GPIO39
 #endif
 
-void Test(void)
+void Test_PIN(void)
 {
 	EALLOW;
 	GpioCtrlRegs.GPBMUX1.bit.GPIO39 = 0;
 	GpioCtrlRegs.GPBDIR.bit.GPIO39 = 1;
-	GpioDataRegs.GPBDAT.bit.GPIO39 = 1;
+	GpioDataRegs.GPBDAT.bit.GPIO39 = 0;
 	EDIS;
 }
 
@@ -41,7 +41,7 @@ void Test(void)
 void eCAP_Init(void)
 {
 #ifdef TEST
-	Test();
+	Test_PIN();
 #endif
 	//GPIO Config
 	EALLOW;

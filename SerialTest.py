@@ -3,7 +3,7 @@ import serial
 import struct
 import time
 
-motorSpeed = 15
+motorSpeed = 10
 testTime = 10
 
 #ser_write method
@@ -47,6 +47,8 @@ else:
 	dat = (struct.unpack(">l", sciData))[0]
 	dat /= 60.0
 	print "The period of speed: %f us" % (dat)
+	
+	time.sleep(10)
 	
 	#waiting for read faild msg!
 	sciData = ser.read(4)
