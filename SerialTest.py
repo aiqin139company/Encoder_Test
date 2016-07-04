@@ -2,7 +2,7 @@ import sys
 import serial
 import struct
 
-motorSpeed = 20
+motorSpeed = 80
 testTime = 10
 
 #ser_write method
