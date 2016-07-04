@@ -93,10 +93,8 @@ __interrupt void eCAP_CNT(void)		//20us
 
 	if( 10000 == cnt )
 	{
-		limit_H = LP.Out + _IQmpy(LP.Out, _IQ(0.5));
-		limit_L = LP.Out - _IQmpy(LP.Out, _IQ(0.5));
-//		limit_H = LP.Out + LP.Out >> 1;
-//		limit_L = LP.Out - LP.Out >> 1;
+		limit_H = LP.Out + _IQmpy(LP.Out, _IQ(0.3));
+		limit_L = LP.Out - _IQmpy(LP.Out, _IQ(0.3));
 		SCITX(LP.Out);
 		LowPass_Reinit(LP);
 	}
